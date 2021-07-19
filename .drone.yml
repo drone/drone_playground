@@ -8,3 +8,4 @@ steps:
   pull: if-not-exists
   commands:
   - go version
+  - foo
