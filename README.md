@@ -1,10 +1,4 @@
-# drone_playground
-
-Helping get up to speed with drone via examples.
-
-Fork this repository into your own namespace and have a try out the examples.
-
-***DO NOT CHECK CREDENTIALS INTO THIS REPO***
+this is rubbish
 
 ## This repository
 
