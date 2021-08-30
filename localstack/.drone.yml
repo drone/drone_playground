@@ -1,0 +1,79 @@
+---
+kind: pipeline
+type: docker
+name: localstack
+
+platform:
+  os: linux
+  arch: amd64
+
+steps:
+  - name: wait-for-localstack
+    image: busybox
+    commands:
+      - sleep 60
+
+  - name: create-kinesis-stream
+    image: ruanbekker/awscli
+    environment:
+      AWS_ACCESS_KEY_ID: 123
+      AWS_SECRET_ACCESS_KEY: xyz
+      AWS_DEFAULT_REGION: eu-west-1
+    commands:
+      - aws --endpoint-url=http://localstack:4566 kinesis create-stream --stream-name mystream --shard-count 1
+
+  - name: describe-kinesis-streams
+    image: ruanbekker/awscli
+    environment:
+      AWS_ACCESS_KEY_ID: 123
+      AWS_SECRET_ACCESS_KEY: xyz
+      AWS_DEFAULT_REGION: eu-west-1
+    commands:
+      - aws --endpoint-url=http://localstack:4566 kinesis describe-stream --stream-name mystream
+
+  - name: put-records-into-kinesis
+    image: ruanbekker/awscli
+    environment:
+      AWS_ACCESS_KEY_ID: 123
+      AWS_SECRET_ACCESS_KEY: xyz
+      AWS_DEFAULT_REGION: eu-west-1
+    commands:
+      - for record in $$(seq 1 100); do aws --endpoint-url=http://localstack:4566 kinesis put-record --stream-name mystream --partition-key 123 --data testdata_$$record ; done
+
+  - name: get-records-from-kinesis
+    image: ruanbekker/awscli
+    environment:
+      AWS_ACCESS_KEY_ID: 123
+      AWS_SECRET_ACCESS_KEY: xyz
+      AWS_DEFAULT_REGION: eu-west-1
+    commands:
+      - SHARD_ITERATOR=$$(aws --endpoint-url=http://localstack:4566 kinesis get-shard-iterator --shard-id shardId-000000000000 --shard-iterator-type TRIM_HORIZON --stream-name mystream --query 'ShardIterator' --output text)
+      - for each in $$(aws --endpoint-url=http://localstack:4566 kinesis get-records --shard-iterator $$SHARD_ITERATOR | jq -cr '.Records[].Data'); do echo $each | base64 -d ; echo "" ; done
+
+  - name: delete-kinesis-stream
+    image: ruanbekker/awscli
+    environment:
+      AWS_ACCESS_KEY_ID: 123
+      AWS_SECRET_ACCESS_KEY: xyz
+      AWS_DEFAULT_REGION: eu-west-1
+    commands:
+      - aws --endpoint-url=http://localstack:4566 kinesis delete-stream --stream-name mystream
+
+services:
+  - name: localstack
+    image: localstack/localstack:0.12.17
+    environment:
+      DOCKER_HOST: unix:///var/run/docker.sock
+      EDGE_PORT: 4566
+    volumes:
+      - name: docker-socket
+        path: /var/run/docker.sock
+      - name: localstack-vol
+        path: /tmp/localstack
+
+volumes:
+- name: localstack-vol
+  temp: {}
+- name: docker-socket
+  host:
+    path: /var/run/docker.sock
