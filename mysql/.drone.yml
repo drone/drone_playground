@@ -1,0 +1,34 @@
+---
+kind: pipeline
+type: docker
+name: default
+
+platform:
+  os: linux
+  arch: amd64
+
+steps:
+  - name: mysql healthcheck
+    image: mysql:5.7
+    commands:
+      - while ! mysqladmin ping -h mysql-server -u drone -pdrone --silent; do sleep 1; done
+  - name: mysql-client DDL
+    image: mysql:5.7
+    commands: 
+      - mysql -h mysql-server -u drone -pdrone -e "CREATE TABLE IF NOT EXISTS drone_db.pipelines (id INT AUTO_INCREMENT PRIMARY KEY, name VARCHAR(50) NOT NULL);"
+      - mysql -h mysql-server -u drone -pdrone drone_db -e "INSERT IGNORE INTO drone_db.pipelines (id, name) VALUES (NULL, 'drone-go');"
+      - mysql -h mysql-server -u drone -pdrone drone_db -e "INSERT IGNORE INTO drone_db.pipelines (id, name) VALUES (NULL, 'drone-python');"
+      - mysql -h mysql-server -u drone -pdrone drone_db -e "INSERT IGNORE INTO drone_db.pipelines (id, name) VALUES (NULL, 'drone-java');"
+  - name: mysql-client DML
+    image: mysql:5.7
+    commands:
+      - mysql -h mysql-server -u drone -pdrone drone_db -e "SELECT * FROM drone_db.pipelines;"
+  
+services:
+  - name: mysql-server
+    image: mysql:5.7
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: yes
+      MYSQL_DATABASE: drone_db
+      MYSQL_USER: drone
+      MYSQL_PASSWORD: drone
