@@ -180,6 +180,23 @@ To try this build. In the settings of this repo in you drone ui. Set the path fo
 
 For more advanced information on services go here `https://docs.drone.io/pipeline/kubernetes/syntax/services/`
 
+### Localstack service
+
+[Localstack](https://localstack.cloud/) provides a mock framework for developing cloud applications, which you can spin up a local test environment which provides the same functionality and API's as the real AWS Cloud Environment.
+
+Code lives here in the `localstack` folder, it runs a localstack service in a basic `.drone.yml` file that:
+
+- provisions a localstack service that enables you to interact with the localstack api's
+- localstack health check that waits on the localstack service to come up
+- create kineses stream step, which creates a kineses resource on localstack to produce and consume records from
+- put records step, which put's 100 records into kinesis using a for loop
+- get records step, which consumes all the records from kinesis
+- delete kinesis stream step, which deletes the kinesis resource from localstack
+
+To try this build, In the settings of this repo in your drone ui, set the path for the drone file to `./localstack/.drone.yml`
+
+For more advanced information on services go here `https://docs.drone.io/pipeline/kubernetes/syntax/services/`
+
 ## TODO's
 
 - Add workspace setting for golang .drone.yml, to remove cd hack.

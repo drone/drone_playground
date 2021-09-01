@@ -9,9 +9,13 @@ platform:
 
 steps:
   - name: wait-for-localstack
-    image: busybox
+    image: ruanbekker/awscli
+    environment:
+      AWS_ACCESS_KEY_ID: 123
+      AWS_SECRET_ACCESS_KEY: xyz
+      AWS_DEFAULT_REGION: eu-west-1
     commands:
-      - sleep 60
+      - while ! aws --endpoint-url=http://localstack:4566 kinesis list-streams; do sleep 1; done
 
   - name: create-kinesis-stream
     image: ruanbekker/awscli
