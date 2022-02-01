@@ -121,6 +121,11 @@ To try this build. In the settings of this repo in you drone ui. Set the path fo
 
 For more advanced information on services go here `https://docs.drone.io/pipeline/kubernetes/syntax/services/`
 
+### Cards
+
+Here is an example of creating cards using Drone-Docker, Snyk & Git-Leaks plugin.
+To try this build. In the settings of this repo in you drone ui. Set the path for the drone file to `./cards/card.yml`
+
 ## Running and installing Drone in AWS using Github as the git provider
 
 **THIS IS NOT RECOMMENDED FOR PRODUCTION** **THIS IS NOT RECOMMENDED FOR PRODUCTION**
