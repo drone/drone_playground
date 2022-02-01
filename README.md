@@ -117,14 +117,15 @@ Code lives here in the `mysql` folder, it runs a mysql service in a basic `.dron
 - DDL sql step to create and insert data into a table
 - DML sql step to get data from the table
 
-To try this build. In the settings of this repo in you drone ui. Set the path for the drone file to `./mysql/.drone.yml`
+To try this build. In the settings of this repo in the drone ui. Set the path for the drone file to `./mysql/.drone.yml`
 
 For more advanced information on services go here `https://docs.drone.io/pipeline/kubernetes/syntax/services/`
 
 ### Cards
 
-Here is an example of creating cards using [Drone-Docker](https://github.com/drone-plugins/drone-docker), [Snyk](https://us-east-2.console.aws.amazon.com/ec2/v2/home?region=us-east-2#Home:) & [Git-Leaks](https://github.com/drone/drone-gitleaks) plugin.
-To try this build. In the settings of this repo in you drone ui. Set the path for the drone file to `./cards/card.yml`
+Here is an example of a build that displays cards. It utilizes the [Drone-Docker](https://github.com/drone-plugins/drone-docker), [Snyk](https://us-east-2.console.aws.amazon.com/ec2/v2/home?region=us-east-2#Home:) & [Git-Leaks](https://github.com/drone/drone-gitleaks) plugin.
+To try this build. In the settings of this repo in the drone UI. Set the path for the drone file to `./cards/card.yml`
+You also need to add docker [secrets](https://docs.drone.io/secret/repository/) & [Snyk](https://snyk.io/) credentials.
 
 ## Running and installing Drone in AWS using Github as the git provider
 
