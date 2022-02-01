@@ -123,7 +123,7 @@ For more advanced information on services go here `https://docs.drone.io/pipelin
 
 ### Cards
 
-Here is an example of creating cards using Drone-Docker, Snyk & Git-Leaks plugin.
+Here is an example of creating cards using [Drone-Docker](https://github.com/drone-plugins/drone-docker), [Snyk](https://us-east-2.console.aws.amazon.com/ec2/v2/home?region=us-east-2#Home:) & [Git-Leaks](https://github.com/drone/drone-gitleaks) plugin.
 To try this build. In the settings of this repo in you drone ui. Set the path for the drone file to `./cards/card.yml`
 
 ## Running and installing Drone in AWS using Github as the git provider
