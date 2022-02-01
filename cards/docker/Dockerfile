@@ -2,6 +2,6 @@ FROM alpine:latest
 
 RUN mkdir /app
 WORKDIR /app
-COPY . .
+COPY .. .
 
 CMD ["/app/main"]

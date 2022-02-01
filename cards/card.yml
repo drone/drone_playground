@@ -3,19 +3,11 @@ name: default
 type: docker
 
 steps:
-  - name: build
-    image: golang:1.17
-    pull: if-not-exists
-    commands:
-      - make -C cards
-    environment:
-      aws_access_key: AKIAIOSFODNN7EXAMPLE
-
   - name: scan
     image: plugins/drone-snyk
     privileged: true
     settings:
-      image: docker.io/drone_playground/hello-world:v1.0
+      image: drone_playground/hello-world
       debug: true
       username:
         from_secret: username
@@ -29,11 +21,13 @@ steps:
     image: plugins/docker
     settings:
       repo: plugins/drone_playground
-      dockerfile: Dockerfile
+      dockerfile: docker/Dockerfile
       username:
         from_secret: username
       password:
         from_secret: password
+    environment:
+      aws_access_key: AKIAIOSFODNN7EXAMPLE
 
   - name: git-leak
     image: plugins/gitleaks
