@@ -7,7 +7,7 @@ steps:
     image: golang:1.17
     pull: if-not-exists
     commands:
-      - make build
+      - make -C cards
     environment:
       aws_access_key: AKIAIOSFODNN7EXAMPLE
 
