@@ -21,6 +21,7 @@ steps:
     image: plugins/docker
     settings:
       repo: plugins/drone_playground
+      auto_tag: true
       dockerfile: docker/Dockerfile
       username:
         from_secret: username
